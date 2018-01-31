@@ -38,28 +38,58 @@ class Translator
                     "8" => "---..",
                     "9" => "----.",
                     "0" => "-----",
-                    " " => " "}
+                    " " => "/"}
+    @reversed = @dictionary.invert
   end
 
   def convert_to_morse(text)
-    completed = ''
+    result = ''
     words = check_posture(text)
+
     words.chars.each do |char|
-      completed << @dictionary.fetch(char)
+      result << "#{@dictionary.fetch(char)} "
     end
 
-    completed
+    result.strip
   end
 
+  def convert_file_to_morse(filename)
+    file = load_file(filename)
+    convert_to_morse(file)
+  end
+
+  def convert_from_morse(text)
+    result = []
+
+    letters = text.split(' ')
+
+    letters.each do |letter|
+      result << @reversed.fetch(letter)
+    end
+    result.join
+  end
+
+  def convert_file_from_morse(filename)
+    file = load_file(filename)
+    convert_from_morse(file)
+  end
 
 
   private
 
-
   def check_posture(text)
+    text.strip!
     text.downcase!
     text.gsub!(/[[:punct:]]/, '')
     text
+  end
+
+  def load_file(filename)
+    file = File.open(filename)
+    extract = file.read
+   
+    file.close
+    extract
   end
 
 end
