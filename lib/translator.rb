@@ -1,8 +1,8 @@
+require 'pry'
 class Translator
   attr_reader :dictionary
-
   def initialize
-    @dictionary = {"a" => ".-",
+    @dictionary = { "a" => ".-",
                     "b" => "-...",
                     "c" => "-.-.",
                     "d" => "-..",
@@ -40,4 +40,26 @@ class Translator
                     "0" => "-----",
                     " " => " "}
   end
+
+  def convert_to_morse(text)
+    completed = ''
+    words = check_posture(text)
+    words.chars.each do |char|
+      completed << @dictionary.fetch(char)
+    end
+
+    completed
+  end
+
+
+
+  private
+
+
+  def check_posture(text)
+    text.downcase!
+    text.gsub!(/[[:punct:]]/, '')
+    text
+  end
+
 end
